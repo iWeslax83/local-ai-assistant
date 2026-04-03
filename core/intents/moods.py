@@ -17,10 +17,25 @@ def handle_log_mood(conn: sqlite3.Connection, data: dict) -> str:
     return response
 
 def handle_mood_trend(conn: sqlite3.Connection, data: dict) -> str:
-    rows = conn.execute("SELECT level, journal, DATE(created_at) as day FROM moods ORDER BY created_at DESC LIMIT 7").fetchall()
+    period = data.get("period", "week")
+
+    if period == "month":
+        limit = 30
+        period_label = "Son 30 Gün"
+    elif period == "year":
+        limit = 365
+        period_label = "Son 1 Yıl"
+    else:  # week (default)
+        limit = 7
+        period_label = "Son 7 Gün"
+
+    rows = conn.execute(
+        "SELECT level, journal, DATE(created_at) as day FROM moods ORDER BY created_at DESC LIMIT ?",
+        (limit,),
+    ).fetchall()
     if not rows:
         return "😊 Henüz ruh hali kaydı yok."
-    lines = ["😊 **Son Ruh Hali Trendi**\n"]
+    lines = [f"😊 **Ruh Hali Trendi — {period_label}**\n"]
     for row in rows:
         emoji = MOOD_EMOJIS.get(row["level"], "😐")
         journal_str = f" — {row['journal']}" if row["journal"] else ""

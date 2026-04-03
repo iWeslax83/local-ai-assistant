@@ -24,3 +24,10 @@ def test_expense_summary(db):
 def test_expense_summary_empty(db):
     result = handle_expense_summary(db, {})
     assert "harcama yok" in result.lower() or "0" in result
+
+def test_expense_summary_weekly(db):
+    db.execute("INSERT INTO expenses (amount, category, description) VALUES (100, 'market', 'Test')")
+    db.commit()
+    result = handle_expense_summary(db, {"period": "week"})
+    assert "Hafta" in result
+    assert "100" in result

@@ -23,3 +23,9 @@ def test_mood_trend_with_data(db):
     db.commit()
     result = handle_mood_trend(db, {})
     assert "harika" in result.lower() or "iyi" in result.lower()
+
+def test_mood_trend_monthly(db):
+    db.execute("INSERT INTO moods (level, journal) VALUES ('iyi', 'Test')")
+    db.commit()
+    result = handle_mood_trend(db, {"period": "month"})
+    assert "30 Gün" in result
