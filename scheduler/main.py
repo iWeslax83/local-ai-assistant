@@ -2,6 +2,15 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(name)s] %(levelname)s: %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
+logger = logging.getLogger("scheduler")
+
 from apscheduler.schedulers.blocking import BlockingScheduler
 from core.db import get_db, init_db
 from scheduler.jobs import (
@@ -38,12 +47,12 @@ def main():
     scheduler.add_job(weekly_report_job, "cron", day_of_week=report_day[:3], hour=int(report_h), minute=int(report_m), id="weekly_report")
     scheduler.add_job(monthly_report_job, "cron", day="last", hour=int(report_h), minute=int(report_m), id="monthly_report")
 
-    print("[Scheduler] Başlatıldı. Zamanlanmış görevler:")
-    print(f"  ☀️ Sabah özeti: {morning_time}")
-    print(f"  🔔 Hatırlatma kontrolü: her dakika")
-    print(f"  😊 Ruh hali sorgusu: {mood_time}")
-    print(f"  📊 Haftalık rapor: {report_day} {report_time}")
-    print(f"  📊 Aylık rapor: ayın son günü {report_time}")
+    logger.info("Başlatıldı. Zamanlanmış görevler:")
+    logger.info("  Sabah özeti: %s", morning_time)
+    logger.info("  Hatırlatma kontrolü: her dakika")
+    logger.info("  Ruh hali sorgusu: %s", mood_time)
+    logger.info("  Haftalık rapor: %s %s", report_day, report_time)
+    logger.info("  Aylık rapor: ayın son günü %s", report_time)
     scheduler.start()
 
 if __name__ == "__main__":
