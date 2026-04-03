@@ -8,6 +8,7 @@ from core.intents.expenses import handle_add_expense, handle_expense_summary
 from core.intents.moods import handle_log_mood, handle_mood_trend
 from core.intents.goals import handle_add_goal, handle_update_goal, handle_goal_status
 from core.intents.preferences import handle_update_preference
+from core.intents.self_modify import handle_modify_code, handle_confirm_code_change, handle_rollback_code
 
 INTENT_HANDLERS = {
     "add_task": handle_add_task,
@@ -29,6 +30,9 @@ INTENT_HANDLERS = {
     "update_goal": handle_update_goal,
     "goal_status": handle_goal_status,
     "update_preference": handle_update_preference,
+    "modify_code": handle_modify_code,
+    "confirm_code_change": handle_confirm_code_change,
+    "rollback_code": handle_rollback_code,
 }
 
 def dispatch_intent(conn: sqlite3.Connection, intent: str, data: dict) -> str | None:
