@@ -92,9 +92,10 @@ CREATE TABLE IF NOT EXISTS messages (
 CREATE TABLE IF NOT EXISTS code_changes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     description TEXT NOT NULL,
-    files_changed TEXT NOT NULL,
-    git_commit_hash TEXT NOT NULL,
-    status TEXT NOT NULL DEFAULT 'uygulandı',
+    plan TEXT,
+    files_changed TEXT NOT NULL DEFAULT '[]',
+    git_commit_hash TEXT,
+    status TEXT NOT NULL DEFAULT 'beklemede',
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 """
