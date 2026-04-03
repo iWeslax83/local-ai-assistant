@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS events (
     title TEXT NOT NULL,
     event_time DATETIME NOT NULL,
     remind_at DATETIME,
+    reminder_sent BOOLEAN NOT NULL DEFAULT 0,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 

@@ -38,11 +38,13 @@ def check_event_reminders_job() -> None:
     try:
         now = datetime.now().strftime("%Y-%m-%d %H:%M")
         events = conn.execute(
-            "SELECT id, title, event_time FROM events WHERE remind_at IS NOT NULL AND remind_at <= ? AND remind_at > DATETIME(?, '-2 minutes')",
-            (now, now),
+            "SELECT id, title, event_time FROM events WHERE remind_at IS NOT NULL AND remind_at <= ? AND reminder_sent = 0",
+            (now,),
         ).fetchall()
         for e in events:
             _send_message(f"📅 Yaklaşan etkinlik: **{e['title']}**\n🕐 {e['event_time']}")
+            conn.execute("UPDATE events SET reminder_sent = 1 WHERE id = ?", (e["id"],))
+        conn.commit()
     finally:
         conn.close()
 
