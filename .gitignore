@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.pyo
+.env
+assistant.db
+node_modules/
+bot/.wwebjs_auth/
+bot/.wwebjs_cache/
+.venv/
+*.egg-info/
+dist/
+build/
