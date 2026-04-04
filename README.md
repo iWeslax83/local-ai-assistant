@@ -1,19 +1,19 @@
 # Yerel AI Asistan
 
-WhatsApp uzerinden Turkce konusan, tamamen yerel calisan kisisel uretkenlik asistani.
+WhatsApp üzerinden Türkçe konuşan, tamamen yerel çalışan kişisel üretkenlik asistanı.
 
-## Ozellikler
+## Özellikler
 
-- **Gorev Yonetimi** — Dogal dille gorev ekle, listele, tamamla
-- **Takvim** — Etkinlik ekle, hatirlatma ayarla
-- **Notlar** — Hizli not kaydet, etiketle, ara
-- **Hatirlatmalar** — Zamana dayali hatirlatmalar
-- **Aliskanlik Takibi** — Gunluk hedefler, seri takibi
-- **Harcama Takibi** — Kategori bazli kayit, aylik/haftalik ozet
-- **Ruh Hali Gunlugu** — Gunluk ruh hali kaydi, trend analizi
-- **Hedef Takibi** — Uzun vadeli hedefler, ilerleme cubugu
-- **Raporlar** — Sabah ozeti, haftalik/aylik raporlar
-- **Self-Modify** — WhatsApp'tan bot davranisini ve kodunu degistir
+- **Görev Yönetimi** — Doğal dille görev ekle, listele, tamamla
+- **Takvim** — Etkinlik ekle, hatırlatma ayarla
+- **Notlar** — Hızlı not kaydet, etiketle, ara
+- **Hatırlatmalar** — Zamana dayalı hatırlatmalar
+- **Alışkanlık Takibi** — Günlük hedefler, seri takibi
+- **Harcama Takibi** — Kategori bazlı kayıt, aylık/haftalık özet
+- **Ruh Hali Günlüğü** — Günlük ruh hali kaydı, trend analizi
+- **Hedef Takibi** — Uzun vadeli hedefler, ilerleme çubuğu
+- **Raporlar** — Sabah özeti, haftalık/aylık raporlar
+- **Self-Modify** — WhatsApp'tan bot davranışını ve kodunu değiştir
 
 ## Mimari
 
@@ -22,23 +22,23 @@ Desktop (RTX 3060 Ti)
 +---------------------------+
 |  WhatsApp Bot (Node.js)   |  <-- whatsapp-web.js
 |  Core API (FastAPI)       |  <-- Ollama entegrasyonu
-|  Scheduler (APScheduler)  |  <-- Zamanlanmis gorevler
+|  Scheduler (APScheduler)  |  <-- Zamanlanmış görevler
 |  Ollama (Llama 3.1 8B)   |  <-- Yerel AI
-|  SQLite (assistant.db)    |  <-- Tum veriler
+|  SQLite (assistant.db)    |  <-- Tüm veriler
 +---------------------------+
 ```
 
-Laptop sadece gelistirme icin kullanilir (VS Code + SSH).
+Laptop sadece geliştirme için kullanılır (VS Code + SSH).
 
-## Teknoloji Yigini
+## Teknoloji Yığını
 
-| Bilesen | Teknoloji |
+| Bileşen | Teknoloji |
 |---------|-----------|
 | API | Python 3.11+ / FastAPI / uvicorn |
 | AI | Ollama / Llama 3.1 8B |
 | Bot | Node.js / whatsapp-web.js |
-| Zamanlayici | APScheduler |
-| Veritabani | SQLite3 |
+| Zamanlayıcı | APScheduler |
+| Veritabanı | SQLite3 |
 | GPU | NVIDIA RTX 3060 Ti (8GB VRAM) |
 
 ## Kurulum
@@ -50,7 +50,7 @@ curl -fsSL https://ollama.com/install.sh | sh
 ollama pull llama3.1:8b
 ```
 
-### 2. Python Bagimliliklari
+### 2. Python Bağımlılıkları
 
 ```bash
 python -m venv .venv
@@ -58,7 +58,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 3. Node.js Bagimliliklari
+### 3. Node.js Bağımlılıkları
 
 ```bash
 cd bot
@@ -66,47 +66,47 @@ npm install
 cd ..
 ```
 
-### 4. Baslat
+### 4. Başlat
 
 ```bash
 ./start.sh
 ```
 
-Terminal'de QR kod gorunecek — WhatsApp'tan tarayin. Bot hazir.
+Terminal'de QR kod görünecek — WhatsApp'tan tarayın. Bot hazır.
 
-## Kullanim
+## Kullanım
 
-WhatsApp'tan mesaj yazarak kullanin:
+WhatsApp'tan mesaj yazarak kullanın:
 
-| Mesaj | Sonuc |
+| Mesaj | Sonuç |
 |-------|-------|
-| `yarin raporu bitir` | Gorev ekler |
-| `bugün ne var?` | Gunun gorevlerini listeler |
-| `rapor bitti` | Gorevi tamamlar |
-| `yarin saat 3'te doktor` | Takvime etkinlik ekler |
+| `yarın raporu bitir` | Görev ekler |
+| `bugün ne var?` | Günün görevlerini listeler |
+| `rapor bitti` | Görevi tamamlar |
+| `yarın saat 3'te doktor` | Takvime etkinlik ekler |
 | `not al: Ali'nin tel 0532...` | Not kaydeder |
-| `2 saat sonra hatırlat: ilacı iç` | Hatirlatma kurar |
-| `su içtim` | Aliskanlik kaydeder |
+| `2 saat sonra hatırlat: ilacı iç` | Hatırlatma kurar |
+| `su içtim` | Alışkanlık kaydeder |
 | `markette 450 lira harcadım` | Harcama kaydeder |
-| `bu ay 10 kitap oku` | Hedef olusturur |
-| `sabah özetini 7:30'a al` | Bot ayarini degistirir |
+| `bu ay 10 kitap oku` | Hedef oluşturur |
+| `sabah özetini 7:30'a al` | Bot ayarını değiştirir |
 
 ### Otomatik Mesajlar
 
-- **Sabah ozeti** (08:00) — Gunun gorevleri, etkinlikler, aliskanliklar
-- **Ruh hali sorgusu** (21:00) — "Bugun nasil gecti?"
-- **Haftalik rapor** (Pazar 21:00) — Performans ozeti
-- **Aylik rapor** (Ayin son gunu) — Detayli ozet + hedef ilerlemesi
+- **Sabah özeti** (08:00) — Günün görevleri, etkinlikler, alışkanlıklar
+- **Ruh hali sorgusu** (21:00) — "Bugün nasıl geçti?"
+- **Haftalık rapor** (Pazar 21:00) — Performans özeti
+- **Aylık rapor** (Ayın son günü) — Detaylı özet + hedef ilerlemesi
 
-## Proje Yapisi
+## Proje Yapısı
 
 ```
 local-ai-assistant/
 ├── core/
 │   ├── main.py            # FastAPI sunucu
 │   ├── ai.py              # Ollama entegrasyonu
-│   ├── db.py              # SQLite sema + baglanti
-│   ├── reports.py         # Rapor olusturma
+│   ├── db.py              # SQLite şema + bağlantı
+│   ├── reports.py         # Rapor oluşturma
 │   └── intents/           # Intent handler'lar
 │       ├── tasks.py
 │       ├── events.py
@@ -120,12 +120,12 @@ local-ai-assistant/
 │       └── self_modify.py
 ├── scheduler/
 │   ├── main.py            # APScheduler kurulumu
-│   └── jobs.py            # Zamanlanmis is tanimlari
+│   └── jobs.py            # Zamanlanmış iş tanımları
 ├── bot/
 │   ├── index.js           # WhatsApp bot
 │   └── package.json
 ├── tests/                 # 61 test
-├── start.sh               # Tum servisleri baslat
+├── start.sh               # Tüm servisleri başlat
 └── requirements.txt
 ```
 
@@ -136,11 +136,11 @@ source .venv/bin/activate
 pytest tests/ -v
 ```
 
-## Ortam Degiskenleri
+## Ortam Değişkenleri
 
-| Degisken | Varsayilan | Aciklama |
+| Değişken | Varsayılan | Açıklama |
 |----------|-----------|----------|
-| `OWNER_NUMBER` | (bos) | WhatsApp numarasi (orn: 905551234567@c.us) |
+| `OWNER_NUMBER` | (boş) | WhatsApp numarası (örn: 905551234567@c.us) |
 | `CORE_API_URL` | http://localhost:8000 | Core API adresi |
 | `BOT_PORT` | 3000 | Bot HTTP portu |
 
