@@ -10,3 +10,4 @@ bot/.wwebjs_cache/
 *.egg-info/
 dist/
 build/
+.omc/
