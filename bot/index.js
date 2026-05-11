@@ -15,6 +15,7 @@ const client = new Client({
 });
 
 let ownerChatId = OWNER_NUMBER;
+let isProcessing = false;
 
 client.on("qr", (qr) => {
   console.log("[Bot] QR kodu tarayın:");
@@ -25,14 +26,18 @@ client.on("ready", () => {
   console.log("[Bot] WhatsApp bağlantısı kuruldu!");
 });
 
-client.on("message", async (msg) => {
-  if (OWNER_NUMBER && msg.from !== ownerChatId) return;
+client.on("message_create", async (msg) => {
+  if (!msg.fromMe) return;
+  if (isProcessing) return;
+
   if (!ownerChatId) {
     ownerChatId = msg.from;
     console.log(`[Bot] Sahip chat ID kaydedildi: ${ownerChatId}`);
   }
   const text = msg.body.trim();
   if (!text) return;
+
+  isProcessing = true;
   try {
     const response = await fetch(`${CORE_API_URL}/message`, {
       method: "POST",
@@ -40,14 +45,16 @@ client.on("message", async (msg) => {
       body: JSON.stringify({ text }),
     });
     if (!response.ok) {
-      await msg.reply("❌ Bir sorun oluştu, tekrar dener misin?");
+      await client.sendMessage(msg.from, "Bir sorun oluştu, tekrar dener misin?");
       return;
     }
     const data = await response.json();
-    await msg.reply(data.response);
+    await client.sendMessage(msg.from, data.response);
   } catch (error) {
     console.error("[Bot] API hatası:", error.message);
-    await msg.reply("❌ Şu an AI servisine ulaşamıyorum, lütfen biraz sonra tekrar dene.");
+    await client.sendMessage(msg.from, "Şu an AI servisine ulaşamıyorum, lütfen biraz sonra tekrar dene.");
+  } finally {
+    setTimeout(() => { isProcessing = false; }, 1500);
   }
 });
 
