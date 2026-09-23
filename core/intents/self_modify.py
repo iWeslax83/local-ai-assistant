@@ -1,9 +1,7 @@
 # core/intents/self_modify.py
-import json
 import os
 import sqlite3
 import subprocess
-from datetime import datetime
 
 import httpx
 
@@ -89,7 +87,8 @@ def handle_confirm_code_change(conn: sqlite3.Connection, data: dict) -> str:
         result = subprocess.run(
             ["git", "rev-parse", "HEAD"],
             cwd=os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-            capture_output=True, text=True,
+            capture_output=True,
+            text=True,
         )
         backup_hash = result.stdout.strip() if result.returncode == 0 else "unknown"
     except Exception:
@@ -131,11 +130,15 @@ def handle_rollback_code(conn: sqlite3.Connection, data: dict) -> str:
         try:
             subprocess.run(
                 ["git", "revert", "--no-commit", last_change["git_commit_hash"]],
-                cwd=project_dir, capture_output=True, text=True,
+                cwd=project_dir,
+                capture_output=True,
+                text=True,
             )
             subprocess.run(
                 ["git", "commit", "-m", f"revert: {last_change['description']}"],
-                cwd=project_dir, capture_output=True, text=True,
+                cwd=project_dir,
+                capture_output=True,
+                text=True,
             )
         except Exception:
             pass

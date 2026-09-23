@@ -1,5 +1,4 @@
 import sqlite3
-from datetime import datetime
 
 _SCHEMA = """
 CREATE TABLE IF NOT EXISTS tasks (

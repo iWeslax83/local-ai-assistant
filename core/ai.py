@@ -1,5 +1,6 @@
 import json
 import re
+
 import httpx
 
 OLLAMA_URL = "http://localhost:11434/api/chat"
@@ -38,7 +39,9 @@ def build_system_prompt(context: dict) -> str:
     if context.get("tasks"):
         tasks_str = "Bugünkü görevler:\n"
         for t in context["tasks"]:
-            tasks_str += f"- [{t['status']}] {t['title']} (öncelik: {t.get('priority', 'normal')})\n"
+            tasks_str += (
+                f"- [{t['status']}] {t['title']} (öncelik: {t.get('priority', 'normal')})\n"
+            )
 
     habits_str = ""
     if context.get("habits"):

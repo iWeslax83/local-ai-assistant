@@ -1,5 +1,6 @@
 import pytest
-from core.db import init_db, get_db
+
+from core.db import get_db, init_db
 
 
 @pytest.fixture

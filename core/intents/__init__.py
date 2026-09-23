@@ -1,14 +1,19 @@
 import sqlite3
-from core.intents.tasks import handle_add_task, handle_list_tasks, handle_complete_task
+
 from core.intents.events import handle_add_event, handle_list_events
-from core.intents.notes import handle_add_note, handle_search_notes
-from core.intents.reminders import handle_add_reminder
-from core.intents.habits import handle_add_habit, handle_log_habit, handle_habit_status
 from core.intents.expenses import handle_add_expense, handle_expense_summary
+from core.intents.goals import handle_add_goal, handle_goal_status, handle_update_goal
+from core.intents.habits import handle_add_habit, handle_habit_status, handle_log_habit
 from core.intents.moods import handle_log_mood, handle_mood_trend
-from core.intents.goals import handle_add_goal, handle_update_goal, handle_goal_status
+from core.intents.notes import handle_add_note, handle_search_notes
 from core.intents.preferences import handle_update_preference
-from core.intents.self_modify import handle_modify_code, handle_confirm_code_change, handle_rollback_code
+from core.intents.reminders import handle_add_reminder
+from core.intents.self_modify import (
+    handle_confirm_code_change,
+    handle_modify_code,
+    handle_rollback_code,
+)
+from core.intents.tasks import handle_add_task, handle_complete_task, handle_list_tasks
 
 INTENT_HANDLERS = {
     "add_task": handle_add_task,
@@ -34,6 +39,7 @@ INTENT_HANDLERS = {
     "confirm_code_change": handle_confirm_code_change,
     "rollback_code": handle_rollback_code,
 }
+
 
 def dispatch_intent(conn: sqlite3.Connection, intent: str, data: dict) -> str | None:
     handler = INTENT_HANDLERS.get(intent)

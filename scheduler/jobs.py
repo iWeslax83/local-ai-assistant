@@ -1,14 +1,16 @@
 import logging
-import httpx
-import sqlite3
 from datetime import datetime
+
+import httpx
+
 from core.db import get_db
-from core.reports import build_morning_summary, build_weekly_report, build_monthly_report
+from core.reports import build_monthly_report, build_morning_summary, build_weekly_report
 
 logger = logging.getLogger("scheduler")
 
 BOT_URL = "http://localhost:3000/send"
 DB_PATH = "assistant.db"
+
 
 def _send_message(text: str) -> None:
     try:
@@ -17,6 +19,7 @@ def _send_message(text: str) -> None:
         logger.info("Mesaj gönderildi (%d karakter)", len(text))
     except Exception as e:
         logger.error("Mesaj gönderilemedi: %s", e)
+
 
 def morning_summary_job() -> None:
     logger.info("Sabah özeti gönderiliyor...")
@@ -27,19 +30,23 @@ def morning_summary_job() -> None:
     finally:
         conn.close()
 
+
 def check_reminders_job() -> None:
     logger.info("Hatırlatmalar kontrol ediliyor...")
     conn = get_db(DB_PATH)
     try:
         now = datetime.now().strftime("%Y-%m-%d %H:%M")
-        reminders = conn.execute("SELECT id, message FROM reminders WHERE sent = 0 AND remind_at <= ?", (now,)).fetchall()
+        reminders = conn.execute(
+            "SELECT id, message FROM reminders WHERE sent = 0 AND remind_at <= ?", (now,)
+        ).fetchall()
         for r in reminders:
             _send_message(f"🔔 Hatırlatma: **{r['message']}**")
-            logger.info("Hatırlatma gönderildi: %s", r['message'])
+            logger.info("Hatırlatma gönderildi: %s", r["message"])
             conn.execute("UPDATE reminders SET sent = 1 WHERE id = ?", (r["id"],))
         conn.commit()
     finally:
         conn.close()
+
 
 def check_event_reminders_job() -> None:
     logger.info("Etkinlik hatırlatmaları kontrol ediliyor...")
@@ -57,9 +64,13 @@ def check_event_reminders_job() -> None:
     finally:
         conn.close()
 
+
 def mood_check_job() -> None:
     logger.info("Ruh hali sorgusu gönderiliyor...")
-    _send_message("🌙 Bugün nasıl geçti? Ruh halini ve kısa bir not paylaşır mısın?\n\nSeçenekler: harika / iyi / normal / kötü / berbat")
+    _send_message(
+        "🌙 Bugün nasıl geçti? Ruh halini ve kısa bir not paylaşır mısın?\n\nSeçenekler: harika / iyi / normal / kötü / berbat"
+    )
+
 
 def weekly_report_job() -> None:
     logger.info("Haftalık rapor gönderiliyor...")
@@ -69,6 +80,7 @@ def weekly_report_job() -> None:
         _send_message(report)
     finally:
         conn.close()
+
 
 def monthly_report_job() -> None:
     logger.info("Aylık rapor gönderiliyor...")

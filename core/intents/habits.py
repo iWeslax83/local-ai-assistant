@@ -1,6 +1,7 @@
 import sqlite3
 from datetime import date
 
+
 def handle_add_habit(conn: sqlite3.Connection, data: dict) -> str:
     name = data.get("name", "").strip()
     if not name:
@@ -10,10 +11,13 @@ def handle_add_habit(conn: sqlite3.Connection, data: dict) -> str:
     conn.commit()
     return f"✅ Alışkanlık eklendi: **{name}**\n🎯 Günlük hedef: {target}"
 
+
 def handle_log_habit(conn: sqlite3.Connection, data: dict) -> str:
     name = data.get("name", "").strip()
     value = data.get("value", 1)
-    habit = conn.execute("SELECT id, name, target FROM habits WHERE name LIKE ? AND active = 1", (f"%{name}%",)).fetchone()
+    habit = conn.execute(
+        "SELECT id, name, target FROM habits WHERE name LIKE ? AND active = 1", (f"%{name}%",)
+    ).fetchone()
     if not habit:
         return f"❌ '{name}' adında aktif bir alışkanlık bulunamadı."
     conn.execute("INSERT INTO habit_logs (habit_id, value) VALUES (?, ?)", (habit["id"], value))
@@ -25,8 +29,11 @@ def handle_log_habit(conn: sqlite3.Connection, data: dict) -> str:
     ).fetchone()["total"]
     return f"✅ **{habit['name']}**: {total}/{habit['target']} bugün"
 
+
 def handle_habit_status(conn: sqlite3.Connection, data: dict) -> str:
-    habits = conn.execute("SELECT id, name, target FROM habits WHERE active = 1 ORDER BY name").fetchall()
+    habits = conn.execute(
+        "SELECT id, name, target FROM habits WHERE active = 1 ORDER BY name"
+    ).fetchall()
     if not habits:
         return "📊 Tanımlı aktif alışkanlık yok."
     today = date.today().isoformat()
@@ -40,6 +47,7 @@ def handle_habit_status(conn: sqlite3.Connection, data: dict) -> str:
         streak_str = f" · 🔥 {streak} gün seri" if streak > 0 else ""
         lines.append(f"• {h['name']}: {total}/{h['target']}{streak_str}")
     return "\n".join(lines)
+
 
 def _calculate_streak(conn: sqlite3.Connection, habit_id: int, target: int) -> int:
     rows = conn.execute(

@@ -1,4 +1,5 @@
-from core.intents.habits import handle_add_habit, handle_log_habit, handle_habit_status
+from core.intents.habits import handle_add_habit, handle_habit_status, handle_log_habit
+
 
 def test_add_habit(db):
     result = handle_add_habit(db, {"name": "Su iç", "target": 8})
@@ -8,6 +9,7 @@ def test_add_habit(db):
     assert row["target"] == 8
     assert row["active"] == 1
 
+
 def test_log_habit(db):
     db.execute("INSERT INTO habits (name, target) VALUES ('Su iç', 8)")
     db.commit()
@@ -16,13 +18,16 @@ def test_log_habit(db):
     row = db.execute("SELECT SUM(value) as total FROM habit_logs").fetchone()
     assert row["total"] == 2
 
+
 def test_log_habit_not_found(db):
     result = handle_log_habit(db, {"name": "Olmayan", "value": 1})
     assert "bulunamadı" in result.lower() or "bulamadım" in result.lower()
 
+
 def test_habit_status_empty(db):
     result = handle_habit_status(db, {})
     assert "alışkanlık yok" in result.lower() or "tanımlı" in result.lower()
+
 
 def test_habit_status_with_data(db):
     db.execute("INSERT INTO habits (name, target) VALUES ('Su iç', 8)")

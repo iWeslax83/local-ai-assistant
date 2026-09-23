@@ -9,6 +9,7 @@ VALID_KEYS = {
     "timezone": "Zaman dilimi",
 }
 
+
 def handle_update_preference(conn: sqlite3.Connection, data: dict) -> str:
     key = data.get("key", "").strip()
     value = data.get("value", "").strip()
@@ -19,7 +20,10 @@ def handle_update_preference(conn: sqlite3.Connection, data: dict) -> str:
         return "❌ Ayar değeri belirtilmedi."
     old = conn.execute("SELECT value FROM preferences WHERE key = ?", (key,)).fetchone()
     old_value = old["value"] if old else "yok"
-    conn.execute("INSERT OR REPLACE INTO preferences (key, value, updated_at) VALUES (?, ?, ?)", (key, value, datetime.now().isoformat()))
+    conn.execute(
+        "INSERT OR REPLACE INTO preferences (key, value, updated_at) VALUES (?, ?, ?)",
+        (key, value, datetime.now().isoformat()),
+    )
     conn.commit()
     label = VALID_KEYS[key]
     return f"⚙️ **{label}** güncellendi\n📝 Önceki: {old_value}\n✅ Yeni: {value}"

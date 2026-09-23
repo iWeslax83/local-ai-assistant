@@ -1,10 +1,17 @@
 # tests/test_intents_self_modify.py
 from unittest.mock import patch
-from core.intents.self_modify import handle_modify_code, handle_confirm_code_change, handle_rollback_code
+
+from core.intents.self_modify import (
+    handle_confirm_code_change,
+    handle_modify_code,
+    handle_rollback_code,
+)
 
 
 def test_modify_code_stores_pending(db):
-    with patch("core.intents.self_modify._generate_code_plan", return_value="1. test.py - add feature"):
+    with patch(
+        "core.intents.self_modify._generate_code_plan", return_value="1. test.py - add feature"
+    ):
         result = handle_modify_code(db, {"request": "Haftalık özete harcama grafiği ekle"})
     assert "plan" in result.lower() or "onay" in result.lower()
     row = db.execute("SELECT * FROM code_changes WHERE status = 'beklemede'").fetchone()
